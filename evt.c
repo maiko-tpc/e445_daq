@@ -1,0 +1,262 @@
+/* evt.c for new SUBARU experiment Dec. 2014 */
+
+#include "madc32.h"
+#include "babirldrvcaen.h"
+#include "tmb2.h"
+
+#define _DEBUG_EVT 0
+#define _DMA_V775 0
+#define _DMA_MADC32 0
+#define _DMA_TMB2 1
+
+#define LBUF_V775 1088
+#define LBUF_MADC32 1026
+
+#define FADC_DATA 0x2
+#define TPC_DATA 0x3
+#define FOOTER_DATA 0xffffffff
+
+void evt(void){
+  int i,ip,iev;
+
+  int np,icnt;
+
+  /* MADC parameters */
+  short wcnt_madc; // Word counts of the buffer
+  int ievt_madc;   // Event number of each event
+  unsigned int time_madc; // Time stamp of each event
+
+  /* V775 parameters */
+  unsigned int evcnt_v775; // Event counter read from 0x1024 and 0x1026
+  unsigned short tmpevcnt_v775;
+  short wcnt_v775; // Word counts of the buffer
+  int nw_v775; // Number of hit channels in each event
+  int ievt_v775; // Event number of each event
+
+
+  /* TMB2 parameters */
+  int icn,imem;
+#ifdef USE_TMB2
+  int ievt_tmb2[TMB2_NMEM][TMB2_NCN]; /* Event number of each event */
+  int depth[TMB2_NMEM][TMB2_NCN];
+  size_t ccnt_tmb2,wcnt_tmb2;
+#endif
+
+  v7XX_set_interrupt(V775IRQADR, 0x0, 0x1);
+#if _DEBUG_EVT > 0
+  printk("\nEnter evt.c %d.\n", evtn);
+#endif
+
+  //  rpv130_output(RPV130ADR,OPSCASTART);
+
+ again:
+  vme_read_intvector();
+  rpv130_clear(RPV130ADR); // Disable interrupt
+
+//
+//
+  /* Initialization *//////////////////
+  wcnt_v775=0;                       //
+  time_madc=0;                       //
+  nw_v775=0;                         //
+  ievt_v775=0;                       //
+  ievt_madc=0;                       //
+  for(imem=0;imem<TMB2_NMEM;imem++){ //
+    for(icn=0;icn<TMB2_NCN;icn++)    //
+      ievt_tmb2[imem][icn]=0;        //
+  }                                  //
+                                     //
+///////////////////////////////////////
+
+//
+//  
+//  ///////////////////////
+//  /// TMB2 Buffer change
+//  //////////////////////
+
+  //rpv130_level(RPV130ADR,(OPDAQON|OPTMB2BFCH)); 
+
+//  // Veto trigger during swithcing buffer
+//  rpv130_level(RPV130ADR,(OPDAQON|OPTMB2BFCH)); 
+
+//  // Check Memory Input Status
+//  for(imem=0;imem<TMB2_NMEM;imem++){
+//    for(icn=0;icn<TMB2_NCN;icn++) {
+//      i=0;
+//      while(i<1000){
+//	if(!(tmb2_readstat(tmb2adr[imem],icn)&TMB2_STAT_DATAINPUT)) {
+//	  printk("Data for imem:%d icn:%d acquired in %d th loop!!\n",
+//		 imem,icn,i);
+//	  break;
+//	}else{
+//	  //	  printk("Wating for data acquistion.\n");
+//	  delay_us();
+//	}
+//	i++;
+//      }
+//      printk("Number of Loop imem:%d  icn:%d  %d\n",imem,icn,i);
+//    }
+//  }
+//
+
+  // Stop Memory
+  for(imem=0;imem<TMB2_NMEM;imem++){
+    tmb2_stop(tmb2adr[imem]); // stop memory
+    while(1){
+      if(!(tmb2_readstat(tmb2adr[imem],0)&TMB2_STAT_RUN)) break;
+      delay_us();
+      tmb2_stop(tmb2adr[imem]); // stop memory
+    }
+  }
+
+
+  // Read memory depth
+  for(imem=0;imem<TMB2_NMEM;imem++){
+    for(icn=0;icn<TMB2_NCN;icn++) {// Read depth
+      depth[imem][icn]=tmb2_readcnt(tmb2adr[imem],icn);
+      //depth[imem][icn]=64;
+#if _DEBUG_EVT > 0
+      printk("TMB2:imem:%d  icn:%d  depth:%d\n",
+	     imem,icn,depth[imem][icn]);
+#endif
+    }
+    tmb2_switchbuf(tmb2adr[imem]); // Switch buffer
+    tmb2_reset(tmb2adr[imem]); // Reset counter
+  }
+
+  for(imem=0;imem<TMB2_NMEM;imem++){
+    tmb2_start(tmb2adr[imem]); // Restart Memory
+
+    for(icn=0;icn<TMB2_NCN;icn++){
+      while(1){
+	if((tmb2_readstat(tmb2adr[imem],icn)&TMB2_STAT_RUN)) break;
+	delay_us();
+	tmb2_start(tmb2adr[imem]); // Restart Memory
+      }
+    }
+  }
+
+#if _DEBUG_EVT > 1
+  printk("TMB2:Buffer has been switched.\n");
+#endif
+
+  //  rpv130_level(RPV130ADR,OPDAQON); 
+  rpv130_level(RPV130ADR,(OPDAQON|OPTMB2BFCH)); 
+
+//***************** INIT EVENT *********************
+  init_event();
+
+/////////////
+// Read V775
+//////////////
+
+/* Readout of V775 for SSD */ 
+  init_segment(MKSEGID(RCNPEN,F3,SSDT,V775));
+#if _DMA_V775
+  v7XX_dmasegdata(V775SSDADR,34);
+#else
+  v7XX_segdata(V775SSDADR);
+#endif
+  end_segment();
+  //  v7XX_clear(V775SSDADR);
+
+/* Readout of V775 for SSD to here */ 
+
+
+
+  /* readout of v775 for irq */
+  init_segment(MKSEGID(RCNPEN,F3,NAIT,V775));
+  v7XX_segdata(V775IRQADR); //dangerous
+  end_segment();
+
+//  init_segment(MKSEGID(RCNPEN,F3,SSDT,V775));
+//#if _DMA_V775
+//  v7XX_dmasegdata(V775ADR,34);
+//#else
+//  v7XX_segdata(V775ADR);
+//#endif
+//  end_segment();
+//  v7XX_clear(V775ADR);
+
+
+/////////////
+// Read MADC32
+//////////////
+  init_segment(MKSEGID(RCNPEN,F3,SSDE,MADC32));
+  madc32_segdata(MADC32ADR);
+  end_segment();
+
+  if(mp<MAXBUFF){
+    rpv130_output(RPV130ADR,OPBUSYCL);
+    mpflag=0;
+  }
+  else mpflag=1;
+#if _DEBUG_EVT > 0
+  printk("mpflag:%d\n",mpflag);
+#endif
+
+
+
+  //////////////
+  // Read TMB2
+  //////////////
+  for(imem=0;imem<TMB2_NMEM;imem++){
+    for(icn=0;icn<TMB2_NCN;icn++) {
+      int tmpmp,tmpct;
+      /* Set seg ID of MADC (device=7, focal=19, detector=44--47, module=50) */
+      init_segment(MKSEGID(RCNPEN,F3,(44+imem*2+icn),TMB2));
+      tmpmp=mp;
+#if _DMA_TMB2
+      tmpct=tmb2_dmasegdata(tmb2adr[imem],icn,
+			    depth[imem][icn],(int *)(data+mp));
+#else
+      tmpct=tmb2_segdata(tmb2adr[imem],icn,depth[imem][icn],
+      			 (int *)(data+mp));
+#endif
+      mp+=(depth[imem][icn])*2;
+      segmentsize+=(depth[imem][icn])*2;
+
+#if _DEBUG_EVT > 2
+      printk("TMB2: Read %d counts from mem:%d cn:%d depth:%d.\n",
+             tmpct,imem,icn,depth[imem][icn]);
+#if _DEBUG_EVT > 3
+      if(1){
+	int itmp;
+	for(itmp=0;itmp<depth[imem][icn];itmp++)
+	  printk("TMB2: imem:%d:icn%d:%d %08x  depth:%d\n",
+		 imem,icn,itmp,*((int *)(data+tmpmp+itmp*2)),depth[imem][icn]);
+      }
+#endif
+#endif
+      end_segment();
+    }
+  }
+  
+  rpv130_level(RPV130ADR,OPDAQON); 
+  
+  end_event();
+  
+  if(!mpflag){
+    unsigned short irpv;
+    set_amsr(0x29);
+    vread16(RPV130ADR+RPV130_RSFF,&irpv);
+    set_amsr(0x09);
+    
+    if(irpv&0x1) {
+#if _DEBUG_EVT > 0
+      printk("Event occurs during excuting evt.c.\n");
+#endif
+      goto again;
+    }
+  }
+  
+  //  }
+  //
+  //  ///////////////////
+  //#if _DEBUG_EVT > 0
+  //  printk("Exit from evt.c.\n");
+  //#endif
+}
+
+
+
