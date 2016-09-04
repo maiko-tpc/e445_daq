@@ -50,7 +50,9 @@ void madc32_read_irq_vector(unsigned int maddr){
 }
 
 void madc32_irq_reset(unsigned int maddr){
-  vwrite16(maddr+MADC32_IRQ_RESET, 1);
+  short val;
+  val=1;
+  vwrite16(maddr+MADC32_IRQ_RESET, &val);
 }
 
 void madc32_withdraw_irq(unsigned int maddr, short val){

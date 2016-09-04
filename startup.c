@@ -1,5 +1,4 @@
 void startup(void){
-  int ich;
   short sval;
   int imem,icn;
 
@@ -82,21 +81,17 @@ void startup(void){
   vwrite16(V775IRQADR+0x1010,&sval); // Set Control Register 1
   
   //////////////////////////////////////
-  //// Initialize V775 for SSD
+  //// Initialize V1290 for SSD
   //////////////////////////////////////
-  v775_crate_sel(V775SSDADR, 0x0000); // crate select (see sec. 4.31)
-  
-  v775_conf1(V775SSDADR, 0x5800);   // Bit Set 2
-  v775_conf2(V775SSDADR, ~0x5800);   // Bit Set 2
-  v775_full_scale_range(V775SSDADR, 0x1E);
-  ///
-  sval=0x20;
-  vwrite16(V775SSDADR+0x1010,&sval); // Set Control Register 1
+  v1X90_evt_reset(V1290ADR);
+  v1X90_int_level(V1290ADR,0x7);
+  v1X90_almost_full(V1290ADR, 0xffff);
+  v1X90_cnt_reg(V1290ADR, 0x028);
+
 
 #endif  
   
 #ifdef USE_SCALER
-
   ///////////////////////
   //// Initialize V560
   ///////////////////////
@@ -104,13 +99,10 @@ void startup(void){
   sval=1;
   vwrite16(V560ADR+0x50,&sval);  // Scaler Clear
   vwrite16(V560ADR+0x54,&sval);  // VME VETO reset
-
 #endif
   
   /* Start V775 */
 #ifdef USE_CAEN
-  v7XX_clear(V775SSDADR);  // clear data, pointers, event counter and peak section
-  v775_evt_cnt_rst(V775SSDADR); //event counter reset
   v7XX_clear(V775IRQADR);  // clear data, pointers, event counter and peak section
   v775_evt_cnt_rst(V775IRQADR); //event counter reset
 #endif
@@ -151,8 +143,6 @@ void startup(void){
   rpv130_output(RPV130ADR,OPSCASTOP|OPIWKRST);
   rpv130_output(RPV130ADR,OPSCACLER);
   rpv130_output(RPV130ADR,OPSCASTART);
-
-  //  rpv130_output(RPV130ADR,OPBUSYCL|OPSCASTART);
   rpv130_output(RPV130ADR,OPBUSYCL);
   rpv130_level(RPV130ADR,OPDAQON);
   printk("DAQ start.\n");

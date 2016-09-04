@@ -20,7 +20,6 @@
 */
 
 /* Address Map */
-//#define V775ADR             0x30000000
 #define V7XX_OUTBUFF        0x0000   /* - 0x07ff (D32) */
 #define V7XX_FREV           0x1000
 #define V7XX_GEO_ADDR       0x1002
@@ -43,7 +42,6 @@
 #define V7XX_INC_OFF        0x102a
 #define V7XX_LOAD_TEST_REG  0x102c
 #define V7XX_FCLR_WINDOW    0x102e
-
 #define V7XX_BIT_SET2       0x1032
 #define V7XX_BIT_CLE2       0x1034
 #define V7XX_WMEM_TEST      0x1036
@@ -76,10 +74,36 @@
 
 /* For V1190, V1290 */
 /* Register */
+#define V1X90_OUT_BUFF        0x0000
 #define V1X90_INT_LEVEL       0x100a
 #define V1X90_SOFT_CLEAR      0x1016
+#define V1X90_EVT_RESET       0x1018
 #define V1X90_ALMOST_FULL     0x1022
 #define V1X90_EVT_FIFO        0x1038
 
 /* Bit */
 #define V1X90_SOFT_CLEAR_BIT  1
+
+
+/* added by cotemba on 15/11/11 for GAGG @CYRIC */
+#define V1X90_CNT_REG         0x1000
+#define V1X90_MICRO_REG       0x102e
+#define V1X90_MICRO_HAND_REG  0x1030
+
+/* V1290 OPCODE (see $5 in the manual) */
+#define V1290OP_TRG_MATCH         0x0000
+#define V1290OP_READ_ACQ_MOD      0x0200
+
+#define V1290OP_SET_WIN_WID       0x1000
+#define V1290OP_SET_WIN_OFS       0x1100
+#define V1290OP_SET_SW_MRG        0x1200
+#define V1290OP_SET_REJ_MRG       0x1300
+#define V1290OP_EN_SUB_TRG        0x1400
+#define V1290OP_DIS_SUB_TRG       0x1500
+			          
+#define V1290OP_SET_DETECT        0x2200
+#define V1290OP_READ_DETECT       0x2300
+#define V1290OP_SET_TR_LEAD_LSD   0x2400
+#define V1290OP_READ_RES          0x2600
+#define V1290OP_EN_HEAD_TRAIL     0x3000
+#define V1290OP_EN_ALL_CH         0x4200

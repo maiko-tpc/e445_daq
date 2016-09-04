@@ -22,13 +22,26 @@ __attribute__((section("__versions"))) = {
 	{ 0x2bc95bd4, "memset" },
 	{ 0x1d2e87c6, "do_gettimeofday" },
 	{ 0x642e54ac, "__wake_up" },
+	{ 0xd9c0e271, "sbs620_check_interrupt" },
 	{ 0x2e60bace, "memcpy" },
+	{ 0xedd040c3, "sbs620_read_intvector" },
+	{ 0x5b005e78, "sbs620_define_intlevel" },
+	{ 0x5ee7b5ea, "sbs620_vwrite32" },
+	{ 0x51ea5b85, "sbs620_vread32" },
+	{ 0x52e2e538, "sbs620_dma_vread32_store" },
+	{ 0xef7d8f40, "sbs620_dma_vread32_start" },
+	{ 0x338d66dc, "sbs620_enable_interrupt" },
 	{ 0x4b07e779, "_spin_unlock_irqrestore" },
 	{ 0x712aa29b, "_spin_lock_irqsave" },
 	{ 0x2da418b5, "copy_to_user" },
+	{ 0xfcf870be, "sbs620_vwrite16" },
+	{ 0xfecd3026, "sbs620_set_amsr" },
+	{ 0x592fc7a4, "sbs620_vread16" },
 	{ 0x859c6dc7, "request_threaded_irq" },
 	{ 0xffc7c184, "__init_waitqueue_head" },
+	{ 0x4b46f0b0, "sbs620_get_irq" },
 	{ 0xcfdbba1a, "__register_chrdev" },
+	{ 0x31f9d4b, "sbs620_disable_interrupt" },
 	{ 0xb72397d5, "printk" },
 	{ 0x6bc3fbc0, "__unregister_chrdev" },
 	{ 0xf20dabd8, "free_irq" },
@@ -37,10 +50,10 @@ __attribute__((section("__versions"))) = {
 static const char __module_depends[]
 __used
 __attribute__((section(".modinfo"))) =
-"depends=";
+"depends=bb-sbs620";
 
 
-MODULE_INFO(srcversion, "9893B1908CA41E699867749");
+MODULE_INFO(srcversion, "DAEB7BC8F7EF025F0121647");
 
 static const struct rheldata _rheldata __used
 __attribute__((section(".rheldata"))) = {

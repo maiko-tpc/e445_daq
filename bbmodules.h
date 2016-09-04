@@ -38,6 +38,9 @@
 #define V775IRQADR 0x50000000
 #define V775SSDADR 0x51000000
 
+/* definition for V1290 */
+#define V1290ADR 0x52000000
+
 /* definitions for V560 */
 //#define V560ADR 0x40000000
 //#define SCRID 22

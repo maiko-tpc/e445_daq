@@ -6,52 +6,18 @@
  *  @n     event counter for the interrupt generation
  **/
 
-// added by Kawabata 2014/11/21
-#define LBUF_V775 1088
-//#define LBUF_V775 0x200
-
-int v7xx_dmaread(unsigned long maddr,int *buff){
-  int csize,i,j;
-  volatile int dmadelay, dmaflag;
-
-  dmaflag = 0;
-  csize = LBUF_V775 * 4;  /* long word -> char size */
-  printk("I will start (%x).\n",csize);
-  vme_dma_vread32_start(maddr+V7XX_OUTBUFF, csize);
-  delay_us();  /* delay about 1us */
-  dmadelay = 0;
-  printk("I will store.\n");
-  for(dmadelay=0;dmadelay<1000000;dmadelay++){
-    if(vme_dma_vread32_store((char *)buff,csize)){
-      printk("DMA Delay:%d\n",dmadelay);
-      dmadelay = 2000000;
-      dmaflag = 1;
-      break;
-    }else{
-      delay_us();
-    }
-  }
-  printk("DMA delay:%d\n",dmadelay);
-  
-  //  /* Test output for kernel log. */
-  for(i=0;i<LBUF_V775;){
-    for(j=0;j<8;j++) printk("%08x ",buff[i++]);
-    printk("\n");
-  }
-  return 0;
-}
-
-
 
 // added by cotemba 2014/07/03
 void v775_conf1(unsigned int maddr, short sval){
   
   vwrite16(maddr + V7XX_BIT_SET2, &sval);
+
 }
 
 void v775_conf2(unsigned int maddr, short sval){
   
   vwrite16(maddr + V7XX_BIT_CLE2, &sval);
+
 }
 
 
@@ -314,5 +280,186 @@ void v1X90_map_intlevel(short level, int n){
   v1X90_multi_map_intlevel(level, 0, n);
 }
 
-
 #endif
+
+/* added by cotemba on 15/11/11 for GAGG @CYRIC */
+void v1X90_cnt_reg(unsigned int maddr, short sval){
+
+  vwrite16(maddr + V1X90_CNT_REG, &sval);
+}
+void v1X90_int_level(unsigned int maddr, short sval){
+  vwrite16(maddr + V1X90_INT_LEVEL, &sval);
+}
+
+void v1X90_evt_reset(unsigned int maddr){
+  short sval;
+  sval=0x1;
+  vwrite16(maddr + V1X90_EVT_RESET, &sval);
+}
+
+void v1X90_almost_full(unsigned int maddr, short sval){
+  vwrite16(maddr + V1X90_ALMOST_FULL, &sval);
+}
+
+void v1X90_soft_clear(unsigned int maddr, short sval){
+  vwrite16(maddr + V1X90_SOFT_CLEAR, &sval);
+}
+
+/* programming of V1290 using OPCODE */
+void v1290_trg_match(unsigned int maddr){
+  short sval;
+
+
+  short result;
+  sval=V1290OP_TRG_MATCH;
+  result=0;
+// while(result!=1){
+//   vread16(maddr + 0x1030, (short *)&result);
+//   result=result & 0x1;
+//   for(i=0;i<100;i++){
+//     delay_us();
+//   }
+// }
+
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+
+// result=0;
+// while(result!=1){
+//   vread16(maddr + 0x1030, (short *)&result);
+//   result=result & 0x1;
+//   for(i=0;i<100;i++){
+//     delay_us();
+//   }
+// }
+
+}
+
+void v1290_set_win_wid(unsigned int maddr, short sval){
+  short comm;
+  comm=V1290OP_SET_WIN_WID;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+}
+
+void v1290_set_win_ofs(unsigned int maddr, short sval){
+  short comm;
+  comm=V1290OP_SET_WIN_OFS;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+}
+
+void v1290_set_sw_mrg(unsigned int maddr, short sval){
+  short comm;
+  comm=V1290OP_SET_SW_MRG;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+}
+
+void v1290_set_rej_mrg(unsigned int maddr, short sval){
+  short comm;
+  comm=V1290OP_SET_REJ_MRG;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+}
+
+void v1290_en_sub_trg(unsigned int maddr){
+  short comm;
+  comm=V1290OP_EN_SUB_TRG;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+}
+
+void v1290_dis_sub_trg(unsigned int maddr){
+  short comm;
+  comm=V1290OP_DIS_SUB_TRG;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+}
+
+void v1290_set_detect(unsigned int maddr, short sval){
+  short comm;
+  comm=V1290OP_SET_DETECT;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+}
+
+void v1290_set_tr_lead_LSD(unsigned int maddr, short sval){
+  short comm;
+  comm=V1290OP_SET_TR_LEAD_LSD;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+}
+
+void v1290_read_res(unsigned int maddr, short sval){
+  short comm;
+  comm=V1290OP_READ_RES;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+  vwrite16(maddr + V1X90_MICRO_REG, &sval);
+}
+
+void v1290_en_head_trail(unsigned int maddr){
+  int i;
+  short comm;
+  short result;
+
+  result=0;
+  while(result!=1){
+    vread16(maddr + 0x1030, (short *)&result);
+    result=result & 0x1;
+    for(i=0;i<100;i++){
+      delay_us();
+    }
+  }
+
+  comm=V1290OP_EN_HEAD_TRAIL;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+
+  result=0;
+  while(result!=1){
+    vread16(maddr + 0x1030, (short *)&result);
+    result=result & 0x1;
+    for(i=0;i<100;i++){
+      delay_us();
+    }
+  }
+
+}
+
+void v1290_en_all_ch(unsigned int maddr){
+  short comm;
+  comm=V1290OP_EN_ALL_CH;
+  vwrite16(maddr + V1X90_MICRO_REG, &comm);
+}
+
+
+int v1290_segdata(unsigned int maddr){
+  int wordcnt;
+  //  short evtnum;
+  //  int wcnt;
+  short nev;
+
+  vread16(maddr + 0x1020, (short *)&nev);
+  if(nev>1){
+    printk("ERROR: V1290 multi event!, nev=%d \n", nev);
+  }
+
+  wordcnt=0;
+  vread32(maddr + V1X90_OUT_BUFF, (int *)(data+mp));
+  mp+=2;
+  segmentsize+=2;
+  wordcnt++;
+
+  if((data[mp-1]&0xf800) == 0x4000){
+    
+    while((data[mp-1]&0xf800)!=0x8000){
+      vread32(maddr + V1X90_OUT_BUFF, (int *)(data+mp));
+      mp+=2;
+      segmentsize+=2;
+      wordcnt++;
+
+      if(wordcnt>10000){
+	printk("V1290 too many data!\n");
+	break;
+      }
+    }
+  }
+  return segmentsize;
+}

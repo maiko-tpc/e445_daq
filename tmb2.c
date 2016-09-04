@@ -94,9 +94,10 @@ int tmb2_readverreg(unsigned int maddr){
 
 int tmb2_dmasegdata(unsigned int maddr,int icn,int depth,int *buff){
   int wordcnt, csize;
-  int staadr, stoadr, staflag, vsize;
-  int i,j;
-  volatile int dmadelay, dmaflag, loop;
+  volatile int dmadelay, dmaflag;
+  //  int i,j;
+  //  int staadr, stoadr, staflag, vsize;
+  //  volatile int loop;
 
   for(wordcnt=0;wordcnt<depth;){
     dmaflag = 0;

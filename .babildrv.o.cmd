@@ -1,7 +1,7 @@
-cmd_/home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.o := gcc -Wp,-MD,/home/quser/daq/exp/maiko/2016Aug2/drv/.babildrv.o.d  -nostdinc -isystem /usr/lib/gcc/i686-redhat-linux/4.4.7/include -Iinclude  -I/usr/src/kernels/2.6.32-504.23.4.el6.i686/include/uapi -I/usr/src/kernels/2.6.32-504.23.4.el6.i686/arch/x86/include -Iarch/include/generated -Iinclude -include /usr/src/kernels/2.6.32-504.23.4.el6.i686/include/linux/kconfig.h -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -Wa,-mtune=generic32 -ffreestanding -fstack-protector -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_AVX=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -Wframe-larger-than=1024 -Wno-unused-but-set-variable -fomit-frame-pointer -g -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-dwarf2-cfi-asm -fconserve-stack  -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(babildrv)"  -D"KBUILD_MODNAME=KBUILD_STR(babildrv)" -D"DEBUG_HASH=37" -D"DEBUG_HASH2=15" -c -o /home/quser/daq/exp/maiko/2016Aug2/drv/.tmp_babildrv.o /home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.c
+cmd_/home/quser/daq/exp/maiko/2016Sep/drv/babildrv.o := gcc -Wp,-MD,/home/quser/daq/exp/maiko/2016Sep/drv/.babildrv.o.d  -nostdinc -isystem /usr/lib/gcc/i686-redhat-linux/4.4.7/include -Iinclude  -I/usr/src/kernels/2.6.32-504.23.4.el6.i686/include/uapi -I/usr/src/kernels/2.6.32-504.23.4.el6.i686/arch/x86/include -Iarch/include/generated -Iinclude -include /usr/src/kernels/2.6.32-504.23.4.el6.i686/include/linux/kconfig.h -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -Wa,-mtune=generic32 -ffreestanding -fstack-protector -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_AVX=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -Wframe-larger-than=1024 -Wno-unused-but-set-variable -fomit-frame-pointer -g -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-dwarf2-cfi-asm -fconserve-stack  -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(babildrv)"  -D"KBUILD_MODNAME=KBUILD_STR(babildrv)" -D"DEBUG_HASH=62" -D"DEBUG_HASH2=23" -c -o /home/quser/daq/exp/maiko/2016Sep/drv/.tmp_babildrv.o /home/quser/daq/exp/maiko/2016Sep/drv/babildrv.c
 
-deps_/home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.o := \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.c \
+deps_/home/quser/daq/exp/maiko/2016Sep/drv/babildrv.o := \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babildrv.c \
   /usr/src/kernels/2.6.32-504.23.4.el6.i686/include/linux/kconfig.h \
     $(wildcard include/config/h.h) \
     $(wildcard include/config/.h) \
@@ -668,30 +668,30 @@ deps_/home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.o := \
   include/linux/poll.h \
   /usr/src/kernels/2.6.32-504.23.4.el6.i686/arch/x86/include/asm/poll.h \
   include/asm-generic/poll.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/bbmodules.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babilctrl.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/def-sbs620.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/bb-vme.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babilio.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babirldrvdef.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babirldrvridf.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/usemodules.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babirldrvcaen.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/babirldrvcaen.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/rpv130.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/rpv130.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/madc32.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/madc32.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/tmb2.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/tmb2.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/segidlist.h \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/startup.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/evt.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/sca.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/stop.c \
-  /home/quser/daq/exp/maiko/2016Aug2/drv/clear.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/bbmodules.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babilctrl.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/def-sbs620.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/bb-vme.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babildrv.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babilio.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babirldrvdef.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babirldrvridf.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/usemodules.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babirldrvcaen.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/babirldrvcaen.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/rpv130.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/rpv130.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/madc32.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/madc32.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/tmb2.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/tmb2.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/segidlist.h \
+  /home/quser/daq/exp/maiko/2016Sep/drv/startup.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/evt.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/sca.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/stop.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/clear.c \
 
-/home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.o: $(deps_/home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.o)
+/home/quser/daq/exp/maiko/2016Sep/drv/babildrv.o: $(deps_/home/quser/daq/exp/maiko/2016Sep/drv/babildrv.o)
 
-$(deps_/home/quser/daq/exp/maiko/2016Aug2/drv/babildrv.o):
+$(deps_/home/quser/daq/exp/maiko/2016Sep/drv/babildrv.o):
