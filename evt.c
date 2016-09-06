@@ -17,6 +17,7 @@
 #define FOOTER_DATA 0xffffffff
 
 void evt(void){
+  v7XX_set_interrupt(V775IRQADR, 0x0, 0x1); // disable interrupt
 
   /* MADC parameters */
   int ievt_madc;   // Event number of each event
@@ -36,7 +37,7 @@ void evt(void){
   //  size_t ccnt_tmb2,wcnt_tmb2;
 #endif
 
-  v7XX_set_interrupt(V775IRQADR, 0x0, 0x1);
+
 #if _DEBUG_EVT > 0
   printk("\nEnter evt.c %d.\n", evtn);
 #endif
@@ -123,14 +124,17 @@ void evt(void){
   init_segment(MKSEGID(RCNPEN,F3,NAIT,V775));
   v7XX_segdata(V775IRQADR); //dangerous
   end_segment();
+  v7XX_clear(V775IRQADR); // added on 16/09/06
   
 
 /////////////
 // Read MADC32
 //////////////
+#ifdef USE_MADC32
   init_segment(MKSEGID(RCNPEN,F3,SSDE,MADC32));
   madc32_segdata(MADC32ADR);
   end_segment();
+#endif
 
   /* busy clear */
   if(mp<MAXBUFF){
@@ -161,18 +165,18 @@ void evt(void){
       mp+=(depth[imem][icn])*2;
       segmentsize+=(depth[imem][icn])*2;
 
-#if _DEBUG_EVT > 2
-      printk("TMB2: Read %d counts from mem:%d cn:%d depth:%d.\n",
-             tmpct,imem,icn,depth[imem][icn]);
-#if _DEBUG_EVT > 3
-      if(1){
-	int itmp;
-	for(itmp=0;itmp<depth[imem][icn];itmp++)
-	  printk("TMB2: imem:%d:icn%d:%d %08x  depth:%d\n",
-		 imem,icn,itmp,*((int *)(data+tmpmp+itmp*2)),depth[imem][icn]);
-      }
-#endif
-#endif
+//#if _DEBUG_EVT > 2
+//      printk("TMB2: Read %d counts from mem:%d cn:%d depth:%d.\n",
+//             tmpct,imem,icn,depth[imem][icn]);
+////#if _DEBUG_EVT > 3
+////      if(1){
+////	int itmp;
+////	for(itmp=0;itmp<depth[imem][icn];itmp++)
+////	  printk("TMB2: imem:%d:icn%d:%d %08x  depth:%d\n",
+////		 imem,icn,itmp,*((int *)(data+tmpmp+itmp*2)),depth[imem][icn]);
+////      }
+////#endif
+//#endif
       end_segment();
     }
   }
@@ -191,6 +195,7 @@ void evt(void){
 #if _DEBUG_EVT > 0
       printk("Event occurs during excuting evt.c.\n");
 #endif
+      printk("Event occurs during excuting evt.c.\n");
       goto again;
     }
   }

@@ -9,9 +9,8 @@
 #define DBUFF
 
 #define INTLEVEL 3
-//#define INTLEVEL 4
 
-#define USE_MADC32
+//#define USE_MADC32
 #define USE_RPV130
 #define USE_CAEN
 #define USE_TMB2
@@ -22,21 +21,19 @@
 #define OPBUSYCL    0x1
 #define OPIWKCLE    0x2
 #define OPIWKRST    0x4
-#define OPSCACLER   0x8
-#define OPSCASTART  0x10
-#define OPSCASTOP   0x20
+#define OPSCASTART  0x8
+#define OPSCASTOP   0x10
+#define OPSCACLEAR  0x20
 #define OPDAQON     0x40
 #define OPTMB2BFCH  0x80
-
 
 #define OPBUSYCL2   16
 
 /* definitions for MADC32 */ 
-#define MADC32ADR 0x20000000
+#define MADC32ADR 0x32000000
 
 /* definitions for V775 */
-#define V775IRQADR 0x50000000
-#define V775SSDADR 0x51000000
+#define V775IRQADR 0x51000000
 
 /* definition for V1290 */
 #define V1290ADR 0x52000000

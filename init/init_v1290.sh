@@ -9,9 +9,9 @@ WIN_WID=60    #25ns unit
 WIN_OFS=-40   #25ns unit
 SW_MRG=0x8    #25ns unit
 REJ_MRG=0x4   #25ns unit
-EDGE_DET=0x3 #0:pair, 1:trading, 2:leading, 3:lead & trad
-LSB=0x2      #0:800ps, 1:200ps, 2:100ps, 3:25ps(only for V1290)
-READ_RES=0x2 #0:800ps, 1:200ps, 2:100ps, 3:25ps(only for V1290)
+EDGE_DET=0x3  #0:pair, 1:trading, 2:leading, 3:lead & trad
+LSB=0x2       #0:800ps, 1:200ps, 2:100ps, 3:25ps(only for V1290)
+READ_RES=0x2  #0:800ps, 1:200ps, 2:100ps, 3:25ps(only for V1290)
 
 # module VME registers
 V1X90_GEO_REG=$((V1X90ADR+0x100E))

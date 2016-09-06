@@ -681,13 +681,12 @@ deps_/home/quser/daq/exp/maiko/2016Sep/drv/babildrv.o := \
   /home/quser/daq/exp/maiko/2016Sep/drv/babirldrvcaen.h \
   /home/quser/daq/exp/maiko/2016Sep/drv/rpv130.c \
   /home/quser/daq/exp/maiko/2016Sep/drv/rpv130.h \
-  /home/quser/daq/exp/maiko/2016Sep/drv/madc32.c \
-  /home/quser/daq/exp/maiko/2016Sep/drv/madc32.h \
   /home/quser/daq/exp/maiko/2016Sep/drv/tmb2.c \
   /home/quser/daq/exp/maiko/2016Sep/drv/tmb2.h \
   /home/quser/daq/exp/maiko/2016Sep/drv/segidlist.h \
   /home/quser/daq/exp/maiko/2016Sep/drv/startup.c \
   /home/quser/daq/exp/maiko/2016Sep/drv/evt.c \
+  /home/quser/daq/exp/maiko/2016Sep/drv/madc32.h \
   /home/quser/daq/exp/maiko/2016Sep/drv/sca.c \
   /home/quser/daq/exp/maiko/2016Sep/drv/stop.c \
   /home/quser/daq/exp/maiko/2016Sep/drv/clear.c \

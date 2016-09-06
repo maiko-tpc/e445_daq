@@ -35,8 +35,8 @@ __attribute__((section("__versions"))) = {
 	{ 0x712aa29b, "_spin_lock_irqsave" },
 	{ 0x2da418b5, "copy_to_user" },
 	{ 0xfcf870be, "sbs620_vwrite16" },
-	{ 0xfecd3026, "sbs620_set_amsr" },
 	{ 0x592fc7a4, "sbs620_vread16" },
+	{ 0xfecd3026, "sbs620_set_amsr" },
 	{ 0x859c6dc7, "request_threaded_irq" },
 	{ 0xffc7c184, "__init_waitqueue_head" },
 	{ 0x4b46f0b0, "sbs620_get_irq" },
@@ -53,7 +53,7 @@ __attribute__((section(".modinfo"))) =
 "depends=bb-sbs620";
 
 
-MODULE_INFO(srcversion, "DAEB7BC8F7EF025F0121647");
+MODULE_INFO(srcversion, "292E32D9947C73DB6887C38");
 
 static const struct rheldata _rheldata __used
 __attribute__((section(".rheldata"))) = {
