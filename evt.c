@@ -4,10 +4,10 @@
 #include "babirldrvcaen.h"
 #include "tmb2.h"
 
-#define _DEBUG_EVT 0
+#define _DEBUG_EVT 1
 #define _DMA_V775 0
 #define _DMA_MADC32 0
-#define _DMA_TMB2 1
+#define _DMA_TMB2 0
 
 #define LBUF_V775 1088
 #define LBUF_MADC32 1026
@@ -18,6 +18,7 @@
 
 void evt(void){
   v7XX_set_interrupt(V775IRQADR, 0x0, 0x1); // disable interrupt
+  rpv130_output(RPV130ADR, 0x80);
 
   /* MADC parameters */
   int ievt_madc;   // Event number of each event
@@ -103,7 +104,6 @@ void evt(void){
   printk("TMB2:Buffer has been switched.\n");
 #endif
 
-  //  rpv130_level(RPV130ADR,OPDAQON); 
   rpv130_level(RPV130ADR,(OPDAQON|OPTMB2BFCH)); 
 
 //***************** INIT EVENT *********************
@@ -124,7 +124,7 @@ void evt(void){
   init_segment(MKSEGID(RCNPEN,F3,NAIT,V775));
   v7XX_segdata(V775IRQADR); //dangerous
   end_segment();
-  v7XX_clear(V775IRQADR); // added on 16/09/06
+  //  v7XX_clear(V775IRQADR); // added on 16/09/06
   
 
 /////////////
@@ -149,34 +149,41 @@ void evt(void){
   //////////////
   // Read TMB2
   //////////////
+#if _DEBUG_EVT > 0
+  printk("TMB2: Read begin.\n");
+#endif
   for(imem=0;imem<TMB2_NMEM;imem++){
     for(icn=0;icn<TMB2_NCN;icn++) {
       int tmpmp,tmpct;
       /* Set seg ID of MADC (device=7, focal=19, detector=44--47, module=50) */
       init_segment(MKSEGID(RCNPEN,F3,(44+imem*2+icn),TMB2));
       tmpmp=mp;
-#if _DMA_TMB2
+      #if _DMA_TMB2
       tmpct=tmb2_dmasegdata(tmb2adr[imem],icn,
-			    depth[imem][icn],(int *)(data+mp));
-#else
+      			    depth[imem][icn],(int *)(data+mp));
+      #else
       tmpct=tmb2_segdata(tmb2adr[imem],icn,depth[imem][icn],
-      			 (int *)(data+mp));
-#endif
-      mp+=(depth[imem][icn])*2;
-      segmentsize+=(depth[imem][icn])*2;
+			 (int *)(data+mp));
+      #endif
 
-//#if _DEBUG_EVT > 2
-//      printk("TMB2: Read %d counts from mem:%d cn:%d depth:%d.\n",
-//             tmpct,imem,icn,depth[imem][icn]);
-////#if _DEBUG_EVT > 3
-////      if(1){
-////	int itmp;
-////	for(itmp=0;itmp<depth[imem][icn];itmp++)
-////	  printk("TMB2: imem:%d:icn%d:%d %08x  depth:%d\n",
-////		 imem,icn,itmp,*((int *)(data+tmpmp+itmp*2)),depth[imem][icn]);
-////      }
-////#endif
-//#endif
+
+      printk("TMB2: number of word is %d\n",tmpct);
+
+            mp+=(depth[imem][icn])*2;
+            segmentsize+=(depth[imem][icn])*2;
+
+#if _DEBUG_EVT > 2
+      printk("TMB2: Read %d counts from mem:%d cn:%d depth:%d.\n",
+             tmpct,imem,icn,depth[imem][icn]);
+#if _DEBUG_EVT > 3
+      if(1){
+	int itmp;
+	for(itmp=0;itmp<depth[imem][icn];itmp++)
+	  printk("TMB2: imem:%d:icn%d:%d %08x  depth:%d\n",
+		 imem,icn,itmp,*((int *)(data+tmpmp+itmp*2)),depth[imem][icn]);
+      }
+#endif
+#endif
       end_segment();
     }
   }

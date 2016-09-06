@@ -53,7 +53,7 @@ __attribute__((section(".modinfo"))) =
 "depends=bb-sbs620";
 
 
-MODULE_INFO(srcversion, "292E32D9947C73DB6887C38");
+MODULE_INFO(srcversion, "E9A0AA157E349A17E7FA627");
 
 static const struct rheldata _rheldata __used
 __attribute__((section(".rheldata"))) = {

@@ -1,5 +1,4 @@
 void clear(void){
-  printk("Enter clear()\n");
 
   int i;
 
