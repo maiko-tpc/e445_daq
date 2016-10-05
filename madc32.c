@@ -167,7 +167,10 @@ int madc32_segdata(unsigned int maddr){
 
   vread16(maddr + MADC32_BUFFER_DATA_LENGTH, (short *)&cnt);
   cnt = cnt & 0x3fff;
-   //  printk("Data length:%d\n",cnt);
+  if(cnt==0){
+    printk("MADC32 Data length:%d\n",cnt);
+  }
+
   for(i=0;i<cnt;i++){
     vread32(maddr + MADC32_DATA, (unsigned int *)(data+mp));
     //    printk("  Read Data: %08x\n",*(unsigned int *)(data+mp));

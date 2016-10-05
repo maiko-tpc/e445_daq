@@ -10,7 +10,7 @@
 
 #define INTLEVEL 3
 
-//#define USE_MADC32
+#define USE_MADC32
 #define USE_RPV130
 #define USE_CAEN
 #define USE_TMB2

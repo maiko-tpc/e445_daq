@@ -2,11 +2,7 @@ void clear(void){
 
   int i;
 
-#ifdef USE_MADC32
-  madc32_readout_reset(MADC32ADR,1);
-#endif
-
-  for(i=0; i<100; i++){
+  for(i=0; i<10; i++){
     delay_us();
   }
 

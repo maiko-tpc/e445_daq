@@ -4,7 +4,7 @@
 #include "babirldrvcaen.h"
 #include "tmb2.h"
 
-#define _DEBUG_EVT 1
+#define _DEBUG_EVT 0
 #define _DMA_V775 0
 #define _DMA_MADC32 0
 #define _DMA_TMB2 0
@@ -63,6 +63,7 @@ void evt(void){
 ///////////////////////////////////////
 
 
+#ifdef USE_TMB2
   // Stop Memory
   for(imem=0;imem<TMB2_NMEM;imem++){
     tmb2_stop(tmb2adr[imem]); // stop memory
@@ -105,6 +106,8 @@ void evt(void){
 #endif
 
   rpv130_level(RPV130ADR,(OPDAQON|OPTMB2BFCH)); 
+#endif
+
 
 //***************** INIT EVENT *********************
   init_event();
@@ -131,9 +134,12 @@ void evt(void){
 // Read MADC32
 //////////////
 #ifdef USE_MADC32
+  int i;
   init_segment(MKSEGID(RCNPEN,F3,SSDE,MADC32));
   madc32_segdata(MADC32ADR);
   end_segment();
+
+  madc32_readout_reset(MADC32ADR, 1); // added on 16/10/05
 #endif
 
   /* busy clear */
@@ -149,6 +155,8 @@ void evt(void){
   //////////////
   // Read TMB2
   //////////////
+#ifdef USE_TMB2
+
 #if _DEBUG_EVT > 0
   printk("TMB2: Read begin.\n");
 #endif
@@ -167,7 +175,7 @@ void evt(void){
       #endif
 
 
-      printk("TMB2: number of word is %d\n",tmpct);
+      //      printk("TMB2: number of word is %d\n",tmpct);
 
             mp+=(depth[imem][icn])*2;
             segmentsize+=(depth[imem][icn])*2;
@@ -179,8 +187,8 @@ void evt(void){
       if(1){
 	int itmp;
 	for(itmp=0;itmp<depth[imem][icn];itmp++)
-	  printk("TMB2: imem:%d:icn%d:%d %08x  depth:%d\n",
-		 imem,icn,itmp,*((int *)(data+tmpmp+itmp*2)),depth[imem][icn]);
+	  //	  printk("TMB2: imem:%d:icn%d:%d %08x  depth:%d\n",
+	  //		 imem,icn,itmp,*((int *)(data+tmpmp+itmp*2)),depth[imem][icn]);
       }
 #endif
 #endif
@@ -191,6 +199,7 @@ void evt(void){
   rpv130_level(RPV130ADR,OPDAQON); 
   
   end_event();
+#endif
   
   if(!mpflag){
     unsigned short irpv;

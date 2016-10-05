@@ -12,4 +12,4 @@ default:
 
 
 clean:
-	rm -f $(TARGET).ko $(TARGET).o $(TARGET).mod.*
+	rm -f $(TARGET).ko $(TARGET).o $(TARGET).mod.* last.kumac

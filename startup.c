@@ -49,14 +49,14 @@ void startup(void){
   madc32_use_gg(MADC32ADR, 0x1);  // use internal gate
   madc32_hold_delay(MADC32ADR, 0, 0);  // gate delay 
   madc32_hold_width(MADC32ADR, 0, 160);  // gate width (*50 ns) 
-  madc32_nim_busy(MADC32ADR, 0x1); // NIM3 output conf (output internal gate)
+  madc32_nim_busy(MADC32ADR, 0x0); // NIM3 output conf (output internal gate)
   //  madc32_multi_event(MADC32ADR, 3); //multi event mode 3
 
   madc32_irq_threshold(MADC32ADR, 1);
   madc32_max_transfer_data(MADC32ADR, 1);
 
   /* for time stamp from here */
-  madc32_marking_type(MADC32ADR, 0x3);  //00->event counter, 01->time stamp
+  madc32_marking_type(MADC32ADR, 0x1);  //00->event counter, 01->time stamp
                                         //11->extended time stamp
   madc32_NIM_gat1_osc(MADC32ADR, 0x1);  //0->gate1 input, 1->clock input
   madc32_ts_sources(MADC32ADR, 0x1);    //0->VME, 1->external
@@ -115,9 +115,10 @@ void startup(void){
   madc32_fifo_reset(MADC32ADR,0); 
   //  madc32_readout_reset(MADC32ADR,1); //reset FIFO
   
-  madc32_readout_reset(MADC32ADR,0); 
-  madc32_start_acq(MADC32ADR); //start MADC32
   madc32_reset_ctr_ab(MADC32ADR); // reset event counter or timestamp
+  madc32_start_acq(MADC32ADR); //start MADC32
+  madc32_readout_reset(MADC32ADR,1); 
+
 #endif
 
 #ifdef USE_CAEN
