@@ -73,7 +73,8 @@
 #define F7PLAT  14
 #define PLAQ2   15
 #define NAIT    16
-// 16--17
+#define MWDC    17
+
 #define LABRA   18
 #define LABRT   19
 // 20
@@ -132,6 +133,11 @@
 // For Must2
 //#define MUST2DET 50
 //#define PLAYOBI  50
+
+// For E445
+#define BDC1 60
+#define BDC2 61
+
 
 // Module  0--255
 #define C16        0

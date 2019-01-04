@@ -42,6 +42,7 @@
 #define TMB2_STAT_BUSYCLEAR   0x10
 
 #define TMB2_WINDOWSIZE   0x200
+//#define TMB2_WINDOWSIZE   0x2000
 
 void tmb2_reset(unsigned int maddr);
 void tmb2_switchbuf(unsigned int maddr);

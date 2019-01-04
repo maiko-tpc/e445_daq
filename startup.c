@@ -40,6 +40,7 @@ void startup(void){
   // Initialize MADC32
   /////////////////////
 #ifdef USE_MADC32
+  int ich;
   //  evcnt_madc=0;
 
   madc32_resol_4k(MADC32ADR); //set resolution
@@ -49,7 +50,7 @@ void startup(void){
   madc32_use_gg(MADC32ADR, 0x1);  // use internal gate
   madc32_hold_delay(MADC32ADR, 0, 0);  // gate delay 
   madc32_hold_width(MADC32ADR, 0, 160);  // gate width (*50 ns) 
-  madc32_nim_busy(MADC32ADR, 0x0); // NIM3 output conf (output internal gate)
+  madc32_nim_busy(MADC32ADR, 0x1); // NIM3 output 0:busy, 1:gate0
   //  madc32_multi_event(MADC32ADR, 3); //multi event mode 3
 
   madc32_irq_threshold(MADC32ADR, 1);
@@ -58,8 +59,21 @@ void startup(void){
   /* for time stamp from here */
   madc32_marking_type(MADC32ADR, 0x1);  //00->event counter, 01->time stamp
                                         //11->extended time stamp
-  madc32_NIM_gat1_osc(MADC32ADR, 0x1);  //0->gate1 input, 1->clock input
-  madc32_ts_sources(MADC32ADR, 0x1);    //0->VME, 1->external
+  madc32_NIM_gat1_osc(MADC32ADR, 0x0);  //0->gate1 input, 1->clock input
+  madc32_ts_sources(MADC32ADR, 0x0);    //0->VME, 1->external
+
+
+  /* Set thresholds */
+  for(ich=0; ich<32; ich++){
+    madc32_threshold(MADC32ADR, ich, 0x1FFF); //supress all chanels
+    //    madc32_threshold(MADC32ADR, ich, 0x0); //supress all chanels
+  }
+
+  madc32_threshold(MADC32ADR, 5, 0); // enable ch5
+  madc32_threshold(MADC32ADR, 6, 0);
+  madc32_threshold(MADC32ADR, 7, 0);
+  madc32_threshold(MADC32ADR, 8, 0);
+  
   printk("MADC32 initialize done.\n");
   /* to here */
 #endif  
@@ -83,23 +97,36 @@ void startup(void){
   vwrite16(V775IRQADR+0x1010,&sval); // Set Control Register 1
 
   //////////////////////////////////////
-  //// Initialize V1290 for SSD
+  //// Initialize V1190s
   //////////////////////////////////////
-  v1X90_evt_reset(V1290ADR);
-  v1X90_int_level(V1290ADR,0x7);
-  v1X90_almost_full(V1290ADR, 0xffff);
-  v1X90_cnt_reg(V1290ADR, 0x028);
-  printk("V1290 initialize done.\n");
+
+  /* MAIKO */
+  v1X90_evt_reset(V1190_MAIKO_ADR);
+  v1X90_int_level(V1190_MAIKO_ADR,0x7);
+  v1X90_almost_full(V1190_MAIKO_ADR, 0xffff);
+  v1X90_cnt_reg(V1190_MAIKO_ADR, 0x028);
+
+  /* BDC1 */
+  v1X90_evt_reset(V1190_BDC1_ADR);
+  v1X90_int_level(V1190_BDC1_ADR,0x7);
+  v1X90_almost_full(V1190_BDC1_ADR, 0xffff);
+  v1X90_cnt_reg(V1190_BDC1_ADR, 0x028);
+
+  /* BDC2 */
+  v1X90_evt_reset(V1190_BDC2_ADR);
+  v1X90_int_level(V1190_BDC2_ADR,0x7);
+  v1X90_almost_full(V1190_BDC2_ADR, 0xffff);
+  v1X90_cnt_reg(V1190_BDC2_ADR, 0x028);
+
 #endif  
 
 #ifdef USE_SCALER
   ///////////////////////
-  //// Initialize V560
+  //// Initialize V830
   ///////////////////////
 
   sval=1;
-  vwrite16(V560ADR+0x50,&sval);  // Scaler Clear
-  vwrite16(V560ADR+0x54,&sval);  // VME VETO reset
+  vwrite16(V830ADR+0x1122,&sval);  // Scaler Clear
 #endif
 
   /* Start V775 */
@@ -144,11 +171,10 @@ void startup(void){
 
   /* Start DAQ */
   //  rpv130_enable(RPV130ADR);
-  rpv130_output(RPV130ADR,OPSCASTOP|OPIWKRST);
-  rpv130_output(RPV130ADR,OPSCACLEAR);
-  rpv130_output(RPV130ADR,OPSCASTART);
-  rpv130_output(RPV130ADR,OPBUSYCL);
-  rpv130_level(RPV130ADR,OPDAQON);
+  rpv130_output(RPV130ADR,OPIWKRST);
+  rpv130_output(RPV130ADR,OPBUSYCL|OPDAQSTART);
+  rpv130_output(RPV130ADR, OPSCACLEAR);
+  rpv130_output(RPV130ADR, OPSCASTART);
   printk("DAQ start.\n");
 
 }

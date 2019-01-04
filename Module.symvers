@@ -1,1 +1,13 @@
-/usr/nbbq/Module.symvers
+0x031f9d4b	sbs620_disable_interrupt	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0x592fc7a4	sbs620_vread16	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0x51ea5b85	sbs620_vread32	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0x4b46f0b0	sbs620_get_irq	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0xfecd3026	sbs620_set_amsr	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0x5b005e78	sbs620_define_intlevel	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0x338d66dc	sbs620_enable_interrupt	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0xfcf870be	sbs620_vwrite16	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0x5ee7b5ea	sbs620_vwrite32	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0xef7d8f40	sbs620_dma_vread32_start	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0x52e2e538	sbs620_dma_vread32_store	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0xedd040c3	sbs620_read_intvector	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL
+0xd9c0e271	sbs620_check_interrupt	/home/quser/daq/nbbq/nbbq-jul20-2012/bb-sbs620/bb-sbs620	EXPORT_SYMBOL

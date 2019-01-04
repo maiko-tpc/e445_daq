@@ -14,7 +14,7 @@
 #define USE_RPV130
 #define USE_CAEN
 #define USE_TMB2
-//#define USE_SCALER
+#define USE_SCALER
 
 // definitions for RPV130
 #define RPV130ADR   0xf000 
@@ -24,23 +24,24 @@
 #define OPSCASTART  0x8
 #define OPSCASTOP   0x10
 #define OPSCACLEAR  0x20
-#define OPDAQON     0x40
-#define OPTMB2BFCH  0x80
-
-#define OPBUSYCL2   16
+#define OPDAQSTART  0x40
+#define OPDAQSTOP   0x80
+//#define OPTMB2BFCH  0x80
 
 /* definitions for MADC32 */ 
 #define MADC32ADR 0x32000000
 
-/* definitions for V775 */
+/* definitions for V775 IRQ */
 #define V775IRQADR 0x51000000
 
-/* definition for V1290 */
-#define V1290ADR 0x52000000
+/* definition for V1190s */
+#define V1190_MAIKO_ADR 0x00050000
+#define V1190_BDC1_ADR  0x00060000
+#define V1190_BDC2_ADR  0x00070000
 
-/* definitions for V560 */
-//#define V560ADR 0x40000000
-//#define SCRID 22
+/* definitions for V830 */
+#define V830ADR 0x66660000
+#define SCRID 22
 
 /* definitions for TMB2 */
 #define TMB2ADR1 0x300000

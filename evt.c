@@ -7,7 +7,7 @@
 #define _DEBUG_EVT 0
 #define _DMA_V775 0
 #define _DMA_MADC32 0
-#define _DMA_TMB2 0
+#define _DMA_TMB2 1
 
 #define LBUF_V775 1088
 #define LBUF_MADC32 1026
@@ -18,7 +18,6 @@
 
 void evt(void){
   v7XX_set_interrupt(V775IRQADR, 0x0, 0x1); // disable interrupt
-  rpv130_output(RPV130ADR, 0x80);
 
   /* MADC parameters */
   int ievt_madc;   // Event number of each event
@@ -67,6 +66,10 @@ void evt(void){
   // Stop Memory
   for(imem=0;imem<TMB2_NMEM;imem++){
     tmb2_stop(tmb2adr[imem]); // stop memory
+  }
+
+  /* check if Memory is stopped */
+  for(imem=0;imem<TMB2_NMEM;imem++){
     while(1){
       if(!(tmb2_readstat(tmb2adr[imem],0)&TMB2_STAT_RUN)) break;
       delay_us();
@@ -89,9 +92,13 @@ void evt(void){
     tmb2_reset(tmb2adr[imem]); // Reset counter
   }
 
+  /* Restart Memory */
   for(imem=0;imem<TMB2_NMEM;imem++){
-    tmb2_start(tmb2adr[imem]); // Restart Memory
+    tmb2_start(tmb2adr[imem]); 
+  }
 
+  /* Check if Memory is ready */
+  for(imem=0;imem<TMB2_NMEM;imem++){
     for(icn=0;icn<TMB2_NCN;icn++){
       while(1){
 	if((tmb2_readstat(tmb2adr[imem],icn)&TMB2_STAT_RUN)) break;
@@ -105,40 +112,45 @@ void evt(void){
   printk("TMB2:Buffer has been switched.\n");
 #endif
 
-  rpv130_level(RPV130ADR,(OPDAQON|OPTMB2BFCH)); 
 #endif
 
 
 //***************** INIT EVENT *********************
   init_event();
-
-/////////////
-// Read V775
-//////////////
-#ifdef USE_CAEN
-  /* Readout of V775 for SSD */ 
-  init_segment(MKSEGID(RCNPEN,F3,SSDT,V1290));
-  v1290_segdata(V1290ADR);
-  end_segment();
-  /* Readout of V775 for SSD to here */ 
-#endif
   
   /* readout of v775 for irq */
   init_segment(MKSEGID(RCNPEN,F3,NAIT,V775));
   v7XX_segdata(V775IRQADR); //dangerous
   end_segment();
-  //  v7XX_clear(V775IRQADR); // added on 16/09/06
+  v7XX_clear(V775IRQADR); // added on 16/09/06
   
 
+#ifdef USE_CAEN
+  /* Readout of V1190 for MAIKO */ 
+  init_segment(MKSEGID(RCNPEN,F3,SSDT,V1190));
+  v1290_segdata(V1190_MAIKO_ADR);
+  v1290_segdata(V1190_BDC1_ADR);
+  v1290_segdata(V1190_BDC2_ADR);
+  end_segment();
+
+  /* Added o 161119 to reset event FIFO */
+  v1X90_evt_reset(V1190_MAIKO_ADR);
+  v1X90_evt_reset(V1190_BDC1_ADR);
+  v1X90_evt_reset(V1190_BDC2_ADR);
+  
+#endif
+  
+  
 /////////////
 // Read MADC32
 //////////////
 #ifdef USE_MADC32
-  int i;
+  //  int i;
   init_segment(MKSEGID(RCNPEN,F3,SSDE,MADC32));
   madc32_segdata(MADC32ADR);
   end_segment();
 
+  madc32_fifo_reset(MADC32ADR, 1);
   madc32_readout_reset(MADC32ADR, 1); // added on 16/10/05
 #endif
 
@@ -147,7 +159,9 @@ void evt(void){
     rpv130_output(RPV130ADR,OPBUSYCL);
     mpflag=0;
   }
-  else mpflag=1;
+  else {
+    mpflag=1;
+  }
 #if _DEBUG_EVT > 0
   printk("mpflag:%d\n",mpflag);
 #endif
@@ -196,8 +210,6 @@ void evt(void){
     }
   }
   
-  rpv130_level(RPV130ADR,OPDAQON); 
-  
   end_event();
 #endif
   
@@ -211,7 +223,12 @@ void evt(void){
 #if _DEBUG_EVT > 0
       printk("Event occurs during excuting evt.c.\n");
 #endif
-      printk("Event occurs during excuting evt.c.\n");
+      //      printk("Event occurs during excuting evt.c.\n");
+      int i;
+      //      for(i=0; i<250; i++){
+      //	delay_us();
+      //      }
+
       goto again;
     }
   }
@@ -223,6 +240,3 @@ void evt(void){
   //  printk("Exit from evt.c.\n");
   //#endif
 }
-
-
-

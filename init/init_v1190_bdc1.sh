@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # module base address
-V1X90ADR=0x52000000
+V1X90ADR=0x00060000
 
 # configuration parameters
-GEOADR=9
-WIN_WID=60    #25ns unit
-WIN_OFS=-40   #25ns unit
+GEOADR=6
+WIN_WID=960   #25ns unit
+WIN_OFS=-1080 #25ns unit
 SW_MRG=0x8    #25ns unit
 REJ_MRG=0x4   #25ns unit
 EDGE_DET=0x3  #0:pair, 1:trading, 2:leading, 3:lead & trad
@@ -59,13 +59,15 @@ done
 }
 
 echo "------------------------------"
-echo "V1X90 initialization start!!"
+echo "BDC1 V1190 initialization start!!"
 printf "base address= %s\n" $V1X90ADR
+printf "GEO  address= %s\n" $GEOADR
 echo "------------------------------"
 
 # geo address
 printf "GEO address= %s\n" $GEOADR
 cmd=$(printf "cmdvme -ww 0x%x %s" $V1X90_GEO_REG $GEOADR)
+$cmd
 $cmd
 cmd=$(printf "cmdvme -ww 0x%x 1" $V1X90_MOD_RST_REG)
 $cmd
